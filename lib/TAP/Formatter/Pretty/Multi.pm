@@ -33,6 +33,12 @@ sub open_test {
 
 sub _set_colors {
     my ( $self, @colors ) = @_;
+
+    if ( $^O eq 'MSWin32' ) {
+        require TAP::Formatter::Color::Win32;
+        $self->_colorizer( TAP::Formatter::Color::Win32->new );
+    }
+
     if ( my $colorizer = $self->_colorizer ) {
         my $output_func = $self->{_output_func} ||= sub {
             $self->_output(@_);
